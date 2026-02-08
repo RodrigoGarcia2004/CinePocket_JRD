@@ -1,152 +1,227 @@
-CinePoket_JRD — Gestor personal de películas
+# 🎬 CinePocket_JRD
+
+> Tu gestor personal de películas en Android
+
+CinePocket_JRD es una aplicación móvil diseñada para los amantes del cine que quieren descubrir, organizar y compartir sus películas favoritas de manera sencilla.
+
+---
+
+## 👥 Equipo de Desarrollo
+
+- **Javier Escudero García**
+- **Rodrigo García Heredia**  
+- **Diego Forteza**
+
+---
+
+## 📖 Sobre el Proyecto
+
+CinePocket_JRD es una aplicación Android desarrollada para consolidar conocimientos en desarrollo móvil moderno, utilizando las mejores prácticas con **Jetpack Compose**, navegación entre pantallas, consumo de APIs externas y funcionalidades nativas del sistema.
+
+### 🎯 Objetivos
+
+- Crear una experiencia de usuario fluida e intuitiva
+- Integrar datos reales mediante una API de películas
+- Implementar navegación clara entre múltiples vistas
+- Ofrecer funcionalidades de compartir y favoritos
+
+---
+
+## ✨ Funcionalidades
+
+### 🔐 Autenticación
+Pantalla de inicio de sesión que permite el acceso mediante email y contraseña (simulada), preparada para una futura integración con autenticación real.
+
+### 🎥 Explorar Películas
+- Listado ordenado por calificación
+- Información clave: título, fecha de estreno y valoración
+- Importar películas desde API externa
+- Marcar películas como favoritas
+- Gestión del listado completo
+
+### 📱 Detalles de Película
+Vista ampliada con:
+- Información detallada de cada película
+- Compartir mediante WhatsApp o Google
+- Realizar llamadas
+- Abrir información adicional en el navegador
+
+### ⭐ Favoritos
+Acceso rápido a tus películas marcadas como favoritas desde una sección dedicada.
+
+---
+
+## 🏗️ Estructura del Proyecto
+
+```
+app/src/main/java/com/example/cinepocket/
+│
+├── 📂 data/
+│   ├── 📂 di/
+│   │   └── AppModule.kt                    # Inyección de dependencias (Hilt/Dagger)
+│   │
+│   ├── 📂 local/
+│   │   ├── 📂 dao/                         # Data Access Objects
+│   │   ├── 📂 databases/                   # Configuración de Room Database
+│   │   └── 📂 entity/                      # Entidades de base de datos local
+│   │
+│   ├── 📂 remote/
+│   │   ├── 📂 datasource/                  # Fuentes de datos remotas
+│   │   ├── 📂 model/                       # Modelos de respuesta de la API
+│   │   └── 📂 retrofit/                    # Configuración de Retrofit
+│   │
+│   └── 📂 repository/
+│       └── MovieRepository.kt              # Repositorio principal de películas
+│
+├── 📂 navigation/
+│   ├── AppNavHost.kt                       # Host de navegación principal
+│   └── Routes.kt                           # Definición de rutas
+│
+└── 📂 ui/
+    ├── 📂 screens/
+    │   ├── LoginScreens.kt                 # Pantalla de inicio de sesión
+    │   ├── HomeScreens.kt                  # Pantalla principal con listado
+    │   ├── DetailScreen.kt                 # Pantalla de detalle de película
+    │   └── FavoritesScreen.kt              # Pantalla de favoritos
+    │
+    ├── 📂 theme/
+    │   ├── AppMoviesTheme.kt               # Tema principal de la app
+    │
+    ├── 📂 utils/
+    │   ├── ConnectivityObserver.kt         # Interfaz de observación de conectividad
+    │   ├── NetworkConnectivityObserver.kt  # Implementación de observador de red
+    │   ├── Intents.kt                      # Gestión de intents del sistema
+    │   └── ShareUtils.kt                   # Utilidades para compartir contenido
+    │
+    └── 📂 viewmodel/
+        └── (ViewModels de las pantallas)
+```
+
+### 📋 Descripción de Componentes
+
+#### **Data Layer**
+- **DI (Dependency Injection):** Configuración de módulos para inyección de dependencias
+- **Local:** Gestión de persistencia local con Room Database
+- **Remote:** Comunicación con APIs externas mediante Retrofit
+- **Repository:** Patrón repositorio para abstraer las fuentes de datos
+
+#### **Navigation**
+- Configuración de navegación con Navigation Compose
+- Definición de rutas y argumentos entre pantallas
+
+#### **UI Layer**
+- **Screens:** Pantallas principales de la aplicación
+- **Theme:** Sistema de diseño y estilos
+- **Utils:** Utilidades reutilizables (conectividad, intents, compartir)
+- **ViewModel:** Lógica de presentación siguiendo arquitectura MVVM
 
-CinePoket_JRD es una aplicación Android orientada a los amantes del cine que desean descubrir, guardar y organizar películas de forma sencilla. La app permite iniciar sesión, importar películas desde una API externa, consultar valoraciones, acceder a información detallada y compartir contenido fácilmente mediante aplicaciones como WhatsApp o servicios de Google.
+---
 
-Autores
+## 🛠️ Tecnologías
 
-Javier Escudero García
+- **Lenguaje:** Kotlin
+- **UI:** Jetpack Compose
+- **Navegación:** Navigation Compose
+- **Inyección de Dependencias:** Hilt/Dagger
+- **Persistencia Local:** Room Database
+- **Networking:** Retrofit + OkHttp
+- **API:** REST API para datos de películas
+- **Arquitectura:** MVVM (Model-View-ViewModel)
+- **Otros:** Android Intents (llamadas, compartir, navegación web)
 
-Rodrigo García Heredia
+---
 
-Diego Forteza
+## 🚀 Instalación
 
-Introducción y objetivos
+1. **Clonar el repositorio**
+   ```bash
+   git clone https://github.com/RodrigoGarcia2004/CinePocket_JRD.git
+   ```
 
-El objetivo del proyecto CinePoket_JRD es desarrollar una aplicación Android funcional que integre múltiples pantallas, navegación entre vistas y conexión con una API para el consumo de datos externos, aplicando buenas prácticas de desarrollo y diseño de interfaces.
+2. **Abrir en Android Studio**
+   - Abre el proyecto con Android Studio Arctic Fox o superior
 
-El proyecto busca consolidar conocimientos en desarrollo móvil, especialmente en el uso de Jetpack Compose, navegación, consumo de APIs y uso de funcionalidades del sistema Android. En esta fase se prioriza disponer de una aplicación estable, navegable y con una experiencia de usuario clara.
+3. **Sincronizar dependencias**
+   - Espera a que Gradle sincronice automáticamente
 
-Estado del proyecto
+4. **Ejecutar**
+   - Conecta un dispositivo físico o inicia un emulador
+   - Presiona el botón Run ▶️
 
-La aplicación cuenta actualmente con las siguientes funcionalidades:
+---
 
-Pantalla de login para acceso de usuario.
+## 🎨 Diseño
 
-Listado principal de películas ordenadas por calificación.
+- Interfaz minimalista centrada en la experiencia de usuario
+- Diseño basado en tarjetas (cards) para mejor legibilidad
+- Navegación intuitiva entre pantallas
+- Separación clara de responsabilidades (login, listado, detalle)
+- Arquitectura MVVM para separación de capas
 
-Importación de películas desde una API externa.
+---
 
-Vista de detalle de cada película.
+## 📚 Documentación
 
-Sistema de favoritos.
+La documentación completa del código generada con Dokka está disponible en:
 
-Opción para compartir películas mediante WhatsApp o Google.
+```
+build/dokka/html/index.html
+```
 
-Integración con acciones del sistema (llamadas y navegación web).
+Para visualizar la documentación:
+1. Navega a la carpeta `build/dokka/html/`
+2. Abre `index.html` en tu navegador
+3. O accede directamente durante el desarrollo en: `http://localhost:63342/CinePocket/build/dokka/html/index.html`
 
-La app se encuentra en un estado funcional y preparada para futuras ampliaciones.
+### Generar Documentación
 
-Funcionalidades principales
-Login de usuario
+Para regenerar la documentación:
+```bash
+./gradlew dokkaHtml
+```
 
-La aplicación dispone de una pantalla inicial de autenticación simulada, donde el usuario introduce su email y contraseña para acceder a la plataforma. Esta pantalla actúa como punto de entrada al resto de la aplicación y garantiza un flujo de navegación claro, sirviendo como base para una futura implementación de un sistema de autenticación real.
-Listado de películas
+---
 
-Tras el inicio de sesión, el usuario accede a una pantalla con un listado de películas. Cada elemento del listado muestra:
+## 🏛️ Arquitectura
 
-Título de la película
+El proyecto sigue la arquitectura **MVVM (Model-View-ViewModel)** con las siguientes capas:
 
-Fecha de estreno
+```
+┌─────────────────────────────────────┐
+│         UI Layer (Compose)          │
+│  Screens + ViewModels + Navigation  │
+└──────────────┬──────────────────────┘
+               │
+┌──────────────▼──────────────────────┐
+│       Domain Layer (Optional)       │
+│        Use Cases + Models           │
+└──────────────┬──────────────────────┘
+               │
+┌──────────────▼──────────────────────┐
+│          Data Layer                 │
+│  Repository + DataSources + Models  │
+└──────────────┬──────────────────────┘
+               │
+       ┌───────┴────────┐
+       │                │
+┌──────▼──────┐  ┌──────▼──────┐
+│   Remote    │  │    Local    │
+│  (Retrofit) │  │   (Room)    │
+└─────────────┘  └─────────────┘
+```
 
-Valoración media
+---
 
-Botón para marcar como favorita
+## 📄 Licencia
 
-Desde esta pantalla se puede:
+Este proyecto ha sido desarrollado con fines educativos.
 
-Importar películas desde la API.
+---
 
-Borrar el listado completo.
+## 📞 Contacto
 
-Acceder a la sección de favoritos.
+Si tienes preguntas o sugerencias, no dudes en contactar al equipo de desarrollo.
 
-El diseño se basa en tarjetas para facilitar la lectura y mejorar la experiencia de usuario.
+---
 
-Vista de detalle de película
-
-Al seleccionar una película del listado, se accede a una vista de detalle que muestra información ampliada obtenida desde la API:
-
-Título
-
-Fecha de estreno
-
-Valoración
-
-
-Desde esta pantalla el usuario puede:
-
-Realizar una llamada.
-
-Compartir la película mediante WhatsApp o aplicaciones de Google.
-
-Abrir información adicional en un navegador web.
-
-Volver a la pantalla anterior.
-
-Favoritos
-
-La aplicación permite marcar películas como favoritas y consultarlas posteriormente desde una vista dedicada, facilitando la organización y acceso rápido a los contenidos preferidos del usuario.
-
-API y consumo de datos
-
-CinePoket_JRD está enlazada a una API externa de películas, lo que permite trabajar con datos reales y actualizados. A través de esta conexión se obtienen:
-
-Listados de películas
-
-Fechas de estreno
-
-Valoraciones
-
-El uso de una API real aporta mayor realismo al proyecto y demuestra la integración de servicios externos en una aplicación Android.
-
-Decisiones clave de diseño y desarrollo
-
-Interfaz limpia y minimalista, priorizando la claridad visual.
-
-Uso de tarjetas para representar cada película.
-
-Navegación sencilla entre pantallas mediante Navigation Compose.
-
-Separación clara entre vistas principales (login, listado y detalle).
-
-Base preparada para ampliaciones futuras como:
-
-Persistencia local de datos
-
-Arquitectura MVVM
-
-Filtros y búsquedas avanzadas
-
-Recomendaciones personalizadas
-
-Requisitos técnicos
-
-Android Studio
-
-Kotlin
-
-Jetpack Compose
-
-Navigation Compose
-
-Consumo de API REST
-
-Uso de intents del sistema Android
-
-Cómo ejecutar el proyecto
-
-Clonar el repositorio:
-
-git clone https://github.com/TU_USUARIO/CinePoket_JRD.git
-
-Abrir el proyecto en Android Studio.
-
-Sincronizar las dependencias del proyecto.
-
-Ejecutar la aplicación en un emulador o dispositivo físico.
-
-Conclusiones
-
-En esta fase del proyecto se ha conseguido desarrollar una aplicación Android funcional, estable y con una navegación clara, que integra autenticación, consumo de datos externos y múltiples vistas.
-
-CinePoket sienta una base sólida para futuras mejoras y ampliaciones, permitiendo seguir evolucionando el proyecto tanto a nivel técnico como funcional en próximas fases.
+**Desarrollado con ❤️ usando Kotlin y Jetpack Compose**
