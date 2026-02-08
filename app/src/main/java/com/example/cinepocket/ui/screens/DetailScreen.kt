@@ -110,7 +110,7 @@ fun DetailScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Button(
-                        onClick = { openDial(context, "123456789") },
+                        onClick = { openDial(context, "932289600") },
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Icon(Icons.Default.Phone, contentDescription = null)
