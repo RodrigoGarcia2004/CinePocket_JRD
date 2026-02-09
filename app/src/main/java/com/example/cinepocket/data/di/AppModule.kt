@@ -88,9 +88,6 @@ object AppModule {
      * Esta clave se inyecta en el Repository para autenticar
      * las peticiones a la API.
      *
-     * ⚠️ En producción, esta clave debería estar en local.properties
-     * o en variables de entorno, no en el código.
-     *
      * @return Clave de API de TMDB
      */
     @Provides
