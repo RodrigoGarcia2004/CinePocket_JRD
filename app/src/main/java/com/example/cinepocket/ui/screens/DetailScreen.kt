@@ -33,7 +33,8 @@ fun DetailScreen(
     movieId: Int,
     vm: HomeViewModel,
     onBack: () -> Unit
-) {
+)
+{
     val context = LocalContext.current
     var movie by remember { mutableStateOf<MovieEntity?>(null) }
     var isLoading by remember { mutableStateOf(true) }
@@ -43,7 +44,8 @@ fun DetailScreen(
     val textColor = Color(0xFF333333)
     val ratingColor = Color(0xFFFF9800)
 
-    LaunchedEffect(movieId) {
+    LaunchedEffect(movieId)
+    {
         isLoading = true
         movie = vm.getMovieById(movieId)
         isLoading = false
@@ -53,7 +55,8 @@ fun DetailScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-    ) {
+    )
+    {
         when {
             isLoading -> {
                 Box(

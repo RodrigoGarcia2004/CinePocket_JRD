@@ -39,8 +39,8 @@ data class HomeUiState(
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repo: MovieRepository
-) : ViewModel() {
-
+) : ViewModel()
+{
     private val _state = MutableStateFlow(HomeUiState())
 
     /**
@@ -50,7 +50,8 @@ class HomeViewModel @Inject constructor(
      */
     val state: StateFlow<HomeUiState> = _state.asStateFlow()
 
-    init {
+    init
+    {
         // Observa cambios en la base de datos y actualiza el estado
         viewModelScope.launch {
             repo.observeMovies().collect { list ->
@@ -65,15 +66,18 @@ class HomeViewModel @Inject constructor(
      * Resetea la paginación a la página 1 y descarga películas frescas.
      * Actualiza el estado con loading/error según corresponda.
      */
-    fun importMovies() {
+    fun importMovies()
+    {
         viewModelScope.launch {
             _state.update { it.copy(loading = true, error = null, currentPage = 1) }
             try {
                 val movies = repo.getPopularMovies(page = 1)
                 repo.insertMovies(movies)
-            } catch (e: Exception) {
+            } catch (e: Exception)
+            {
                 _state.update { it.copy(error = "No se pudieron importar películas") }
-            } finally {
+            } finally
+            {
                 _state.update { it.copy(loading = false) }
             }
         }
@@ -85,17 +89,20 @@ class HomeViewModel @Inject constructor(
      * Incrementa el contador de página y obtiene más películas.
      * Las nuevas películas se añaden a la base de datos existente.
      */
-    fun loadMoreMovies() {
-        viewModelScope.launch {
+    fun loadMoreMovies()
+    {
+        viewModelScope.launch{
             _state.update { it.copy(loading = true, error = null) }
             try {
                 val nextPage = _state.value.currentPage + 1
                 val movies = repo.getPopularMovies(page = nextPage)
                 repo.insertMovies(movies)
                 _state.update { it.copy(currentPage = nextPage) }
-            } catch (e: Exception) {
+            } catch (e: Exception)
+            {
                 _state.update { it.copy(error = "No se pudieron cargar más películas") }
-            } finally {
+            } finally
+            {
                 _state.update { it.copy(loading = false) }
             }
         }
@@ -107,7 +114,8 @@ class HomeViewModel @Inject constructor(
      * @param id Identificador de la película
      * @return La película si existe, null si no se encuentra
      */
-    suspend fun getMovieById(id: Int): MovieEntity? {
+    suspend fun getMovieById(id: Int): MovieEntity?
+    {
         return repo.getMovieById(id)
     }
 
@@ -116,7 +124,8 @@ class HomeViewModel @Inject constructor(
      *
      * @param id Identificador de la película a marcar/desmarcar
      */
-    fun toggleFavorite(id: Int) {
+    fun toggleFavorite(id: Int)
+    {
         viewModelScope.launch { repo.toggleFavorite(id) }
     }
 
@@ -125,7 +134,8 @@ class HomeViewModel @Inject constructor(
      *
      * También resetea la paginación a la página 1.
      */
-    fun deleteAll() {
+    fun deleteAll()
+    {
         viewModelScope.launch {
             repo.deleteAll()
             _state.update { it.copy(currentPage = 1) }

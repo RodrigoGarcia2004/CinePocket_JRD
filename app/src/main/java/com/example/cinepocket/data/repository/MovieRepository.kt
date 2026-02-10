@@ -28,7 +28,8 @@ class MovieRepository @Inject constructor(
      *
      * @return Flow reactivo que emite la lista actualizada de películas
      */
-    fun observeMovies(): Flow<List<MovieEntity>> {
+    fun observeMovies(): Flow<List<MovieEntity>>
+    {
         return movieDao.observeMovies()
     }
 
@@ -38,7 +39,8 @@ class MovieRepository @Inject constructor(
      * @param id Identificador de la película
      * @return La película si existe, null si no se encuentra
      */
-    suspend fun getMovieById(id: Int): MovieEntity? {
+    suspend fun getMovieById(id: Int): MovieEntity?
+    {
         return movieDao.getById(id)
     }
 
@@ -52,7 +54,8 @@ class MovieRepository @Inject constructor(
      * @return Lista de películas convertidas a MovieEntity
      * @throws Exception Si la petición HTTP falla
      */
-    suspend fun getPopularMovies(page: Int = 1): List<MovieEntity> {
+    suspend fun getPopularMovies(page: Int = 1): List<MovieEntity>
+    {
         val response = dataSource.getPopularMovies(apiKey = apiKey, page = page)
 
         return response.results.map { result ->
@@ -74,7 +77,8 @@ class MovieRepository @Inject constructor(
      *
      * @param movies Lista de películas a guardar
      */
-    suspend fun insertMovies(movies: List<MovieEntity>) {
+    suspend fun insertMovies(movies: List<MovieEntity>)
+    {
         movieDao.upsertAll(movies)
     }
 
@@ -86,7 +90,8 @@ class MovieRepository @Inject constructor(
      *
      * @param id Identificador de la película
      */
-    suspend fun toggleFavorite(id: Int) {
+    suspend fun toggleFavorite(id: Int)
+    {
         val movie = movieDao.getById(id) ?: return
         movieDao.update(movie.copy(isFavorite = !movie.isFavorite))
     }
@@ -94,7 +99,8 @@ class MovieRepository @Inject constructor(
     /**
      * Elimina todas las películas de la base de datos local.
      */
-    suspend fun deleteAll() {
+    suspend fun deleteAll()
+    {
         movieDao.deleteAll()
     }
 }

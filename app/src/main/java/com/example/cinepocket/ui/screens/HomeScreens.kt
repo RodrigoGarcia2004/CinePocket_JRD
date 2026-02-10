@@ -30,7 +30,8 @@ fun HomeScreen(
     vm: HomeViewModel,
     onMovieClick: (Int) -> Unit,
     onFavoritesClick: () -> Unit
-) {
+)
+{
     val state by vm.state.collectAsState()
 
     val primaryColor = Color(0xFF2196F3)
@@ -42,7 +43,8 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-    ) {
+    )
+    {
         Text(
             text = "Tus Películas",
             color = primaryColor,
@@ -59,9 +61,7 @@ fun HomeScreen(
                 onClick = { vm.importMovies() },
                 enabled = !state.loading,
                 modifier = Modifier.weight(1f),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = primaryColor
-                )
+                colors = ButtonDefaults.buttonColors(containerColor = primaryColor)
             )
             {
                 Text("Importar")
@@ -117,14 +117,17 @@ fun HomeScreen(
                 .fillMaxWidth()
                 .weight(1f),
             verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(state.movies) { movie ->
+        )
+        {
+            items(state.movies)
+            { movie ->
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable { onMovieClick(movie.id) },
                     colors = CardDefaults.cardColors(cardColor)
-                ) {
+                )
+                {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -133,7 +136,8 @@ fun HomeScreen(
                     ) {
                         Column(
                             modifier = Modifier.weight(1f)
-                        ) {
+                        )
+                        {
                             Text(
                                 text = movie.title,
                                 color = textColor,
@@ -144,7 +148,8 @@ fun HomeScreen(
 
                             Row(
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
+                            )
+                            {
                                 Text(
                                     text = movie.releaseDate ?: "Sin fecha",
                                     color = Color.Gray
@@ -165,15 +170,17 @@ fun HomeScreen(
                         )
                         {
                             Icon(
-                                imageVector = if (movie.isFavorite)
-                                    Icons.Default.Favorite
-                                else
-                                    Icons.Default.FavoriteBorder,
+                                imageVector =
+                                    if (movie.isFavorite)
+                                        Icons.Default.Favorite
+                                    else
+                                        Icons.Default.FavoriteBorder,
                                 contentDescription = "marcar/desmarcar favorito",
-                                tint = if (movie.isFavorite)
-                                    favoriteColor
-                                else
-                                    Color.Gray,
+                                tint =
+                                    if (movie.isFavorite)
+                                        favoriteColor
+                                    else
+                                        Color.Gray,
                                 modifier = Modifier.size(24.dp)
                             )
                         }
@@ -182,19 +189,22 @@ fun HomeScreen(
             }
         }
 
-        if (state.movies.isNotEmpty() && !state.loading) {
+        if (state.movies.isNotEmpty() && !state.loading)
+        {
             Button(
                 onClick = { vm.loadMoreMovies() },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 12.dp),
                 colors = ButtonDefaults.buttonColors(contentColor = primaryColor)
-            ) {
+            )
+            {
                 Text("Ver más películas")
             }
         }
 
-        if (state.movies.isNotEmpty()) {
+        if (state.movies.isNotEmpty())
+        {
             Text(
                 text = "Mostrando ${state.movies.size} películas",
                 color = Color.Gray,
