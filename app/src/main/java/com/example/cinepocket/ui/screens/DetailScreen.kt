@@ -6,7 +6,9 @@ import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.cinepocket.data.local.entity.MovieEntity
@@ -25,6 +27,7 @@ import com.example.cinepocket.ui.viewmodel.HomeViewModel
  * @param vm ViewModel para obtener los datos
  * @param onBack Se ejecuta al pulsar "Volver"
  */
+
 @Composable
 fun DetailScreen(
     movieId: Int,
@@ -34,6 +37,11 @@ fun DetailScreen(
     val context = LocalContext.current
     var movie by remember { mutableStateOf<MovieEntity?>(null) }
     var isLoading by remember { mutableStateOf(true) }
+
+    val primaryColor = Color(0xFF2196F3)
+    val cardColor = Color(0xFFFAFAFA)
+    val textColor = Color(0xFF333333)
+    val ratingColor = Color(0xFFFF9800)
 
     LaunchedEffect(movieId) {
         isLoading = true
@@ -48,113 +56,139 @@ fun DetailScreen(
     ) {
         when {
             isLoading -> {
-                CircularProgressIndicator()
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(color = primaryColor)
+                }
             }
 
             movie == null -> {
-                Text(
-                    text = "Película no encontrada",
-                    style = MaterialTheme.typography.headlineMedium
-                )
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Película no encontrada",
+                        color = textColor
+                    )
+                    Spacer(Modifier.height(16.dp))
+                    Button(
+                        onClick = onBack,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = primaryColor
+                        )
+                    ) {
+                        Text("Volver")
+                    }
+                }
             }
 
             else -> {
-                Text(
-                    text = movie!!.title,
-                    style = MaterialTheme.typography.headlineMedium
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    AssistChip(
-                        onClick = {},
-                        label = { Text(movie!!.releaseDate ?: "----") }
-                    )
-
-                    AssistChip(
-                        onClick = {},
-                        label = { Text("⭐ ${"%.2f".format(movie!!.rating)}") }
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = MaterialTheme.shapes.large,
-                    elevation = CardDefaults.cardElevation(6.dp)
+                    colors = CardDefaults.cardColors(
+                        containerColor = cardColor
+                    ),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(
                         modifier = Modifier.padding(16.dp)
                     ) {
                         Text(
+                            text = movie!!.title,
+                            color = textColor,
+                            style = MaterialTheme.typography.titleLarge
+                        )
+
+                        Spacer(Modifier.height(8.dp))
+
+                        Row {
+                            Text(
+                                text = movie!!.releaseDate ?: "Sin fecha",
+                                color = Color.Gray
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            Text(
+                                text = "•",
+                                color = Color.Gray
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            Text(
+                                text = "⭐ ${"%.1f".format(movie!!.rating)}",
+                                color = ratingColor
+                            )
+                        }
+
+                        Spacer(Modifier.height(16.dp))
+
+                        Text(
                             text = "Sinopsis",
+                            color = primaryColor,
                             style = MaterialTheme.typography.titleMedium
                         )
 
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(Modifier.height(8.dp))
 
                         Text(
                             text = movie!!.overview,
-                            style = MaterialTheme.typography.bodyMedium
+                            color = textColor
                         )
                     }
                 }
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(Modifier.height(20.dp))
 
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
+                Column {
                     Button(
                         onClick = { openDial(context, "932289600") },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = primaryColor
+                        )
                     ) {
                         Icon(Icons.Default.Phone, contentDescription = null)
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(Modifier.width(8.dp))
                         Text("Llamar")
                     }
 
+                    Spacer(Modifier.height(8.dp))
+
                     Button(
-                        onClick = {
-                            shareMovie(
-                                context = context,
-                                title = movie!!.title,
-                                overview = movie!!.overview
-                            )
-                        },
-                        modifier = Modifier.fillMaxWidth()
+                        onClick = { shareMovie(context, movie!!.title, movie!!.overview) },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = primaryColor
+                        )
                     ) {
                         Icon(Icons.Default.Share, contentDescription = null)
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(Modifier.width(8.dp))
                         Text("Compartir")
                     }
 
+                    Spacer(Modifier.height(8.dp))
+
                     OutlinedButton(
-                        onClick = {
-                            openWeb(
-                                context,
-                                "https://www.themoviedb.org/movie/${movie!!.id}"
-                            )
-                        },
+                        onClick = { openWeb(context, "https://www.themoviedb.org/movie/${movie!!.id}") },
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text("Ver en la web")
                     }
                 }
+
+                Spacer(Modifier.height(24.dp))
+
+                Button(
+                    onClick = onBack,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = primaryColor
+                    )
+                ) {
+                    Text("Volver")
+                }
             }
-        }
-
-        Spacer(modifier = Modifier.height(250.dp))
-
-        Button(
-            onClick = onBack,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Volver")
         }
     }
 }

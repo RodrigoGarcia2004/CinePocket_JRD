@@ -21,7 +21,7 @@ interface MovieDao
      *
      * @return Flow que emite la lista actualizada de películas ordenadas por rating
      */
-    @Query("SELECT * FROM movies ORDER BY rating DESC")
+    @Query("SELECT * FROM movies")
     fun observeMovies(): Flow<List<MovieEntity>>
 
     /**

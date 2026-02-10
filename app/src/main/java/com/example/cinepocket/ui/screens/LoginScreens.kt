@@ -6,7 +6,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -20,127 +19,92 @@ import androidx.compose.ui.unit.dp
  *
  * @param onLoginSuccess Se ejecuta cuando el usuario pulsa "Entrar"
  */
+
 @Composable
-fun LoginScreen(
-    onLoginSuccess: () -> Unit
-) {
+fun LoginScreen(onLoginSuccess: () -> Unit) {
     val (email, setEmail) = remember { mutableStateOf("") }
     val (pass, setPass) = remember { mutableStateOf("") }
 
-    val darkBlue = Color(0xFF0D1B2A)
-    val midBlue = Color(0xFF1B263B)
-    val accent = Color(0xFF3A86FF)
+    val primaryColor = Color(0xFF2196F3)
+    val backgroundColor = Color(0xFFF5F5F5)
+    val textColor = Color(0xFF333333)
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(darkBlue, midBlue)
-                )
-            )
+            .background(backgroundColor)
+            .padding(24.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(220.dp)
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            accent.copy(alpha = 0.25f),
-                            Color.Transparent
-                        )
-                    )
-                )
+        Text(
+            text = "Bienvenido a CinePocket",
+            style = MaterialTheme.typography.headlineMedium,
+            color = textColor,
+            textAlign = TextAlign.Center
         )
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 32.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = "Descubre y guarda tus películas favoritas",
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color.Gray,
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        OutlinedTextField(
+            value = email,
+            onValueChange = setEmail,
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("Email") },
+            singleLine = true,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = primaryColor,
+                unfocusedBorderColor = Color.Gray,
+                focusedLabelColor = primaryColor,
+                unfocusedLabelColor = Color.Gray
+            )
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(
+            value = pass,
+            onValueChange = setPass,
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("Contraseña") },
+            singleLine = true,
+            visualTransformation = PasswordVisualTransformation(),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = primaryColor,
+                unfocusedBorderColor = Color.Gray,
+                focusedLabelColor = primaryColor,
+                unfocusedLabelColor = Color.Gray
+            )
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(
+            onClick = onLoginSuccess,
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = primaryColor
+            )
         ) {
-            Text(
-                text = "CinePocket",
-                style = MaterialTheme.typography.displayMedium,
-                color = Color.White,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = "Descubre, guarda y añade en favoritos\nlas películas que te definen",
-                style = MaterialTheme.typography.titleMedium,
-                color = Color.White.copy(alpha = 0.8f),
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(modifier = Modifier.height(36.dp))
-
-            OutlinedTextField(
-                value = email,
-                onValueChange = setEmail,
-                modifier = Modifier.fillMaxWidth(),
-                label = { Text("Email") },
-                singleLine = true,
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = accent,
-                    unfocusedBorderColor = Color.White.copy(alpha = 0.4f),
-                    focusedLabelColor = accent,
-                    unfocusedLabelColor = Color.White.copy(alpha = 0.6f),
-                    cursorColor = accent,
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White
-                )
-            )
-
-            Spacer(modifier = Modifier.height(18.dp))
-
-            OutlinedTextField(
-                value = pass,
-                onValueChange = setPass,
-                modifier = Modifier.fillMaxWidth(),
-                label = { Text("Contraseña") },
-                singleLine = true,
-                visualTransformation = PasswordVisualTransformation(),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = accent,
-                    unfocusedBorderColor = Color.White.copy(alpha = 0.4f),
-                    focusedLabelColor = accent,
-                    unfocusedLabelColor = Color.White.copy(alpha = 0.6f),
-                    cursorColor = accent,
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White
-                )
-            )
-
-            Spacer(modifier = Modifier.height(34.dp))
-
-            Button(
-                onClick = onLoginSuccess,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = accent
-                )
-            ) {
-                Text(
-                    text = "Entrar",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = Color.White
-                )
-            }
-
-            Spacer(modifier = Modifier.height(26.dp))
-
-            Text(
-                text = "Sin registros · Sin anuncios · Solo cine",
-                style = MaterialTheme.typography.labelLarge,
-                color = Color.White.copy(alpha = 0.55f),
-                textAlign = TextAlign.Center
-            )
+            Text("Entrar")
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = "Sin registros · Sin anuncios",
+            style = MaterialTheme.typography.labelSmall,
+            color = Color.Gray,
+            textAlign = TextAlign.Center
+        )
     }
 }

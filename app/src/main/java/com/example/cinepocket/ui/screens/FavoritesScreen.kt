@@ -11,9 +11,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.cinepocket.ui.viewmodel.HomeViewModel
-
 /**
  * Pantalla de películas favoritas
  *
@@ -29,99 +29,138 @@ fun FavoritesScreen(
     vm: HomeViewModel,
     onMovieClick: (Int) -> Unit,
     onBack: () -> Unit
-) {
+)
+{
     val state by vm.state.collectAsState()
     val favorites = state.movies.filter { it.isFavorite }
+
+    val primaryColor = Color(0xFF2196F3)
+    val favoriteColor = Color(0xFFFF4081)
+    val cardColor = Color(0xFFFAFAFA)
+    val textColor = Color(0xFF333333)
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-    ) {
+    )
+    {
         Text(
             text = "Favoritos",
-            style = MaterialTheme.typography.headlineMedium
+            color = primaryColor,
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(bottom = 16.dp)
         )
-
-        Spacer(Modifier.height(12.dp))
 
         if (favorites.isEmpty()) {
             Column(
                 modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(modifier = Modifier.weight(1f))
-
                 Icon(
                     imageVector = Icons.Default.FavoriteBorder,
                     contentDescription = null,
-                    modifier = Modifier.size(64.dp),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    modifier = Modifier.size(48.dp),
+                    tint = Color.Gray
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
-                    text = "Aún no tienes favoritos",
-                    style = MaterialTheme.typography.titleMedium
+                    text = "No tienes favoritos",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = textColor
                 )
 
                 Text(
                     text = "Marca películas con el corazón para verlas aquí",
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.Gray
                 )
 
-                Spacer(modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.height(24.dp))
 
                 Button(
                     onClick = onBack,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = primaryColor
+                    )
+                )
+                {
                     Text("Volver")
                 }
             }
+        } else
+        {
+            Text(
+                text = "Mostrando ${favorites.size} favoritos",
+                color = Color.Gray,
+                style = MaterialTheme.typography.labelSmall,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
 
-        } else {
             LazyColumn(
-                modifier = Modifier.weight(1f)
-            ) {
-                items(favorites) { movie ->
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            )
+            {
+                items(favorites)
+                { movie ->
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 6.dp)
                             .clickable { onMovieClick(movie.id) },
-                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-                    ) {
+                        colors = CardDefaults.cardColors(
+                            containerColor = cardColor
+                        )
+                    )
+                    {
                         Row(
-                            modifier = Modifier.padding(14.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(12.dp),
                             verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Column(Modifier.weight(1f)) {
+                        )
+                        {
+                            Column(
+                                modifier = Modifier.weight(1f)
+                            )
+                            {
                                 Text(
                                     text = movie.title,
+                                    color = textColor,
                                     style = MaterialTheme.typography.titleMedium
                                 )
-                                Text(
-                                    text = "${movie.releaseDate ?: "----"} · ⭐ ${"%.2f".format(movie.rating)}"
-                                )
-                            }
 
-                            IconButton(
-                                onClick = { vm.toggleFavorite(movie.id) }
+                                Spacer(modifier = Modifier.height(4.dp))
+
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                )
+                                {
+                                    Text(
+                                        text = movie.releaseDate ?: "Sin fecha",
+                                        color = Color.Gray
+                                    )
+                                    Text(
+                                        text = "•",
+                                        color = Color.Gray
+                                    )
+                                    Text(
+                                        text = "⭐ ${"%.1f".format(movie.rating)}",
+                                        color = Color(0xFFFF9800)
+                                    )
+                                }
+                            }
+                            Box(
+                                modifier = Modifier.clickable { vm.toggleFavorite(movie.id) }
                             ) {
                                 Icon(
-                                    imageVector = if (movie.isFavorite)
-                                        Icons.Default.Favorite
-                                    else
-                                        Icons.Default.FavoriteBorder,
+                                    imageVector = Icons.Default.Favorite,
                                     contentDescription = "Quitar de favoritos",
-                                    tint = if (movie.isFavorite)
-                                        MaterialTheme.colorScheme.error  // ← Ahora es rojo
-                                    else
-                                        MaterialTheme.colorScheme.onSurface
+                                    tint = favoriteColor,
+                                    modifier = Modifier.size(24.dp)
                                 )
                             }
                         }
@@ -129,11 +168,14 @@ fun FavoritesScreen(
                 }
             }
 
-            Spacer(Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             Button(
                 onClick = onBack,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = primaryColor
+                )
             ) {
                 Text("Volver")
             }

@@ -1,49 +1,35 @@
 package com.example.cinepocket.ui.utils
 
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 
 /**
- * Comparte texto directamente en WhatsApp.
- *
- * Si WhatsApp no está instalado, abre el selector de apps.
+ * Comparte información de una película.
  *
  * @param context Contexto para lanzar el intent
- * @param text Texto a compartir
+ * @param title Título de la película
+ * @param overview Sinopsis de la película
  */
-fun shareMovieWhatsApp(context: Context, text: String) {
-    val intent = Intent(Intent.ACTION_SEND).apply {
+fun shareMovie(context: Context, title: String, overview: String)
+{
+    val text = "Te recomiendo: $title\n"
+    val intent = Intent(Intent.ACTION_SEND).apply{
         type = "text/plain"
         putExtra(Intent.EXTRA_TEXT, text)
-        setPackage("com.whatsapp")
     }
-    try {
-        context.startActivity(intent)
-    } catch (e: ActivityNotFoundException) {
-        context.startActivity(
-            Intent.createChooser(
-                Intent(Intent.ACTION_SEND).apply {
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_TEXT, text)
-                },
-                "Compartir con..."
-            )
-        )
-    }
+    context.startActivity(Intent.createChooser(intent, "Compartir con"))
 }
 
 /**
  * Abre el marcador telefónico con un número prellenado.
  *
  * @param context Contexto para lanzar el intent
- * @param phone Número de teléfono (ej: "123456789")
+ * @param phone Número de teléfono
  */
-fun openDial(context: Context, phone: String) {
-    val intent = Intent(Intent.ACTION_DIAL).apply {
-        data = Uri.parse("tel:$phone")
-    }
+fun openDial(context: Context, phone: String)
+{
+    val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phone"))
     context.startActivity(intent)
 }
 
@@ -53,7 +39,8 @@ fun openDial(context: Context, phone: String) {
  * @param context Contexto para lanzar el intent
  * @param url URL completa (debe incluir http:// o https://)
  */
-fun openWeb(context: Context, url: String) {
+fun openWeb(context: Context, url: String)
+{
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
     context.startActivity(intent)
 }

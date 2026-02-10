@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.example.cinepocket.navigation.AppNavHost
-import com.example.cinepocket.ui.theme.CinePocketTheme
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
 
@@ -31,9 +30,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            CinePocketTheme {
-                AppNavHost()  // Sistema de navegación con Compose
-            }
+                AppNavHost()
         }
     }
 }

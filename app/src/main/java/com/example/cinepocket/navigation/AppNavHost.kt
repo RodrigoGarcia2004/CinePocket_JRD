@@ -29,9 +29,7 @@ fun AppNavHost() {
         composable(Routes.LOGIN) {
             LoginScreen(
                 onLoginSuccess = {
-                    navController.navigate(Routes.HOME) {
-                        popUpTo(Routes.LOGIN) { inclusive = true }
-                    }
+                    navController.navigate(Routes.HOME)
                 }
             )
         }
@@ -43,7 +41,7 @@ fun AppNavHost() {
                 onMovieClick = { id ->
                     navController.navigate(Routes.detail(id))
                 },
-                onFavoritesClick = {  // ← AÑADIR
+                onFavoritesClick = {
                     navController.navigate(Routes.FAVORITES)
                 }
             )
@@ -56,9 +54,7 @@ fun AppNavHost() {
                 onMovieClick = { id ->
                     navController.navigate(Routes.detail(id))
                 },
-                onBack = {
-                    navController.popBackStack()
-                }
+                onBack = {navController.popBackStack()}
             )
         }
 

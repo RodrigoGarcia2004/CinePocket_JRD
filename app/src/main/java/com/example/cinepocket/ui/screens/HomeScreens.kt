@@ -11,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.cinepocket.ui.viewmodel.HomeViewModel
 
@@ -32,102 +33,148 @@ fun HomeScreen(
 ) {
     val state by vm.state.collectAsState()
 
+    val primaryColor = Color(0xFF2196F3)
+    val favoriteColor = Color(0xFFFF4081)
+    val cardColor = Color(0xFFFAFAFA)
+    val textColor = Color(0xFF333333)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
         Text(
-            text = "Películas por calificación",
-            style = MaterialTheme.typography.headlineMedium
+            text = "Tus Películas",
+            color = primaryColor,
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        Spacer(Modifier.height(12.dp))
-
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.fillMaxWidth()
+        )
+        {
             Button(
                 onClick = { vm.importMovies() },
                 enabled = !state.loading,
-                modifier = Modifier.weight(1f)
-            ) {
+                modifier = Modifier.weight(1f),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = primaryColor
+                )
+            )
+            {
                 Text("Importar")
             }
 
-            OutlinedButton(
+            Button(
                 onClick = { vm.deleteAll() },
                 enabled = !state.loading,
-                modifier = Modifier.weight(1f)
-            ) {
+                modifier = Modifier.weight(1f),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.LightGray
+                )
+            )
+            {
                 Text("Borrar todo")
             }
         }
 
-        Spacer(Modifier.height(8.dp))
-
+        val favCount = state.movies.count { it.isFavorite }
         Button(
             onClick = onFavoritesClick,
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.secondary
-            )
-        ) {
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 12.dp),
+            colors = ButtonDefaults.buttonColors(favoriteColor)
+        )
+        {
             Icon(Icons.Default.Favorite, contentDescription = null)
             Spacer(Modifier.width(8.dp))
-            val favCount = state.movies.count { it.isFavorite }
-            Text("Ver Favoritos ($favCount)")
+            Text("Favoritos ($favCount)")
         }
 
-        if (state.loading) {
-            Spacer(Modifier.height(10.dp))
-            CircularProgressIndicator()
+        if (state.loading)
+        {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = primaryColor)
+            }
         }
 
-        state.error?.let { msg ->
-            Text(text = msg, color = MaterialTheme.colorScheme.error)
+        state.error?.let{ msg ->
+            Text(
+                text = msg,
+                color = Color.Red,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
         }
-
-        Spacer(Modifier.height(12.dp))
 
         LazyColumn(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(state.movies) { movie ->
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 6.dp)
                         .clickable { onMovieClick(movie.id) },
-                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                    colors = CardDefaults.cardColors(cardColor)
                 ) {
                     Row(
-                        modifier = Modifier.padding(14.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Column(modifier = Modifier.weight(1f)) {
+                        Column(
+                            modifier = Modifier.weight(1f)
+                        ) {
                             Text(
                                 text = movie.title,
+                                color = textColor,
                                 style = MaterialTheme.typography.titleMedium
                             )
-                            Text(
-                                text = "${movie.releaseDate ?: "----"} · ⭐ ${"%.2f".format(movie.rating)}",
-                                style = MaterialTheme.typography.bodyMedium
-                            )
+
+                            Spacer(Modifier.height(4.dp))
+
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Text(
+                                    text = movie.releaseDate ?: "Sin fecha",
+                                    color = Color.Gray
+                                )
+                                Text(
+                                    text = "•",
+                                    color = Color.Gray
+                                )
+                                Text(
+                                    text = "⭐ ${"%.1f".format(movie.rating)}",
+                                    color = Color(0xFFFF9800)
+                                )
+                            }
                         }
 
-                        IconButton(onClick = { vm.toggleFavorite(movie.id) }) {
+                        Box(
+                            modifier = Modifier.clickable { vm.toggleFavorite(movie.id) }
+                        )
+                        {
                             Icon(
                                 imageVector = if (movie.isFavorite)
                                     Icons.Default.Favorite
                                 else
                                     Icons.Default.FavoriteBorder,
-                                contentDescription = "Favorito",
+                                contentDescription = "marcar/desmarcar favorito",
                                 tint = if (movie.isFavorite)
-                                    MaterialTheme.colorScheme.error
+                                    favoriteColor
                                 else
-                                    MaterialTheme.colorScheme.onSurface
+                                    Color.Gray,
+                                modifier = Modifier.size(24.dp)
                             )
                         }
                     }
@@ -135,15 +182,27 @@ fun HomeScreen(
             }
         }
 
-        if (state.movies.isNotEmpty()) {
-            Spacer(Modifier.height(8.dp))
-            OutlinedButton(
+        if (state.movies.isNotEmpty() && !state.loading) {
+            Button(
                 onClick = { vm.loadMoreMovies() },
-                enabled = !state.loading,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 12.dp),
+                colors = ButtonDefaults.buttonColors(contentColor = primaryColor)
             ) {
-                Text("Cargar más películas (Página ${state.currentPage + 1})")
+                Text("Ver más películas")
             }
+        }
+
+        if (state.movies.isNotEmpty()) {
+            Text(
+                text = "Mostrando ${state.movies.size} películas",
+                color = Color.Gray,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                style = MaterialTheme.typography.labelSmall
+            )
         }
     }
 }
