@@ -93,7 +93,8 @@ class HomeViewModel @Inject constructor(
     {
         viewModelScope.launch{
             _state.update { it.copy(loading = true, error = null) }
-            try {
+            try
+            {
                 val nextPage = _state.value.currentPage + 1
                 val movies = repo.getPopularMovies(page = nextPage)
                 repo.insertMovies(movies)
