@@ -8,9 +8,9 @@ CinePocket_JRD es una aplicación móvil diseñada para los amantes del cine que
 
 ## 👥 Equipo de Desarrollo
 
-- **Javier Escudero García**
-- **Rodrigo García Heredia**  
-- **Diego Forteza**
+- **Javier **
+- **Rodrigo **  
+- **Diego **
 
 ---
 
